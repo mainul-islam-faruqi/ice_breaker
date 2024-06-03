@@ -17,17 +17,17 @@ def lookup(name: str) -> str:
         temperature=0,
         model_name="gpt-3.5-turbo",
     )
-    template = """given the full name {name_of_person} I want you to get it me a link to their Linkedin profile page.
-                              Your answer should contain only a URL"""
-
+    template = """
+       given the name {name_of_person} I want you to find a link to their Twitter profile page, and extract from it their username
+       In Your Final answer only the person's username"""
     prompt_template = PromptTemplate(
         template=template, input_variables=["name_of_person"]
     )
     tools_for_agent = [
         Tool(
-            name="Crawl Google 4 linkedin profile page",
+            name="Crawl Google 4 Twitter profile page",
             func=get_profile_url_tavily,
-            description="useful for when you need get the Linkedin Page URL",
+            description="useful for when you need get the Twitter Page URL",
         )
     ]
 
@@ -39,9 +39,9 @@ def lookup(name: str) -> str:
         input={"input": prompt_template.format_prompt(name_of_person=name)}
     )
 
-    linked_profile_url = result["output"]
-    return linked_profile_url
+    twitter_username = result["output"]
+    return twitter_username
 
 
 if __name__ == "__main__":
-    print(lookup(name="Eden Marco Udemy"))
+    print(lookup(name="Elon Musk"))
